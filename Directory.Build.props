@@ -1,7 +1,9 @@
 <Project>
     <PropertyGroup>
+        <NexusLibraryVersion>0.2.0.0</NexusLibraryVersion>
+    </PropertyGroup>
+    <PropertyGroup>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
@@ -12,13 +14,15 @@
         <TargetFramework>net7.0</TargetFramework>
     </PropertyGroup>
     <PropertyGroup>
+        <AssemblyVersion>$(NexusLibraryVersion)</AssemblyVersion>
         <Authors>afroze9</Authors>
         <DebugType>embedded</DebugType>
+        <FileVersion>$(NexusLibraryVersion)</FileVersion>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/afroze9/nexus</PackageProjectUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/afroze9/nexus</RepositoryUrl>
-        <Version>0.1.5</Version>
+        <Version>$(NexusLibraryVersion)</Version>
     </PropertyGroup>
 </Project>
