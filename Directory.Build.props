@@ -19,6 +19,6 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/afroze9/nexus</RepositoryUrl>
-        <Version>0.1.4</Version>
+        <Version>0.1.5</Version>
     </PropertyGroup>
 </Project>
