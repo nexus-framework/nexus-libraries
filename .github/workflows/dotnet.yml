@@ -27,4 +27,4 @@ jobs:
 #     - name: Test
 #       run: dotnet test --verbosity normal
     - name: Publish to Nuget
-      run: dotnet nuget push "nexus-libraries/nexus-libraries/artifacts/Release/*.nupkg" --api-key ${{secrets.NUGET_KEY}} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push "artifacts/Release/*.nupkg" --api-key ${{secrets.NUGET_KEY}} --source https://api.nuget.org/v3/index.json
