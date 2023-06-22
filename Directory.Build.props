@@ -1,0 +1,24 @@
+<Project>
+    <PropertyGroup>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+        <Nullable>enable</Nullable>
+        <OutputPath>$(SolutionDir)\artifacts\$(Configuration)\</OutputPath>
+        <TargetFramework>net7.0</TargetFramework>
+    </PropertyGroup>
+    <PropertyGroup>
+        <Authors>afroze9</Authors>
+        <DebugType>embedded</DebugType>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/afroze9/nexus</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/afroze9/nexus</RepositoryUrl>
+        <Version>0.1.4</Version>
+    </PropertyGroup>
+</Project>
