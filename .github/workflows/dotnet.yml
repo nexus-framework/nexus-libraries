@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -20,8 +19,10 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore -c Release
+      run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --verbosity normal
+      run: dotnet test --no-restore --verbosity normal
+    - name: Pack
+      run: dotnet pack --no-restore
     - name: Publish to Nuget
       run: dotnet nuget push "artifacts/Release/*.nupkg" --api-key ${{secrets.NUGET_KEY}} --source https://api.nuget.org/v3/index.json
