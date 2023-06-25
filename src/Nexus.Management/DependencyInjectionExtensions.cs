@@ -7,8 +7,16 @@ using Steeltoe.Management.Endpoint.Refresh;
 
 namespace Nexus.Management;
 
+/// <summary>
+/// A static class that provides extension methods for adding core actuators to the service collection.
+/// </summary>
 public static class DependencyInjectionExtensions
 {
+    /// <summary>
+    /// Adds the health, info, and refresh actuators to the service collection and activates the actuator endpoints.
+    /// </summary>
+    /// <param name="services">The service collection to add the actuators to.</param>
+    /// <param name="configuration">The configuration to use for the actuators.</param>
     public static void AddCoreActuators(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHealthActuator(configuration);

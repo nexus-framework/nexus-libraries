@@ -11,8 +11,16 @@ using Steeltoe.Discovery.Client;
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;
 
+/// <summary>
+/// Provides extension methods for configuring dependency injection in a web framework.
+/// </summary>
 public static class DependencyInjectionExtensions
 {
+    /// <summary>
+    /// Adds API documentation using Swagger to the service collection based on the specified settings.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <param name="settings">The API documentation settings.</param>
     private static void AddApiDocumentation(this IServiceCollection services, ApiDocumentationSettings settings)
     {
         services.AddEndpointsApiExplorer();
@@ -58,6 +66,11 @@ public static class DependencyInjectionExtensions
         });
     }
 
+    /// <summary>
+    /// Adds core services and features to the service collection based on the specified configuration.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <param name="configuration">The configuration.</param>
     public static void AddWebFramework(this IServiceCollection services, IConfiguration configuration)
     {
         FrameworkSettings settings = new ();

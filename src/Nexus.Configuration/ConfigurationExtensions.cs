@@ -3,8 +3,16 @@ using Winton.Extensions.Configuration.Consul;
 
 namespace Nexus.Configuration;
 
+/// <summary>
+/// Provides extension methods for configuring core configuration settings.
+/// </summary>
 public static class ConfigurationExtensions
 {
+    /// <summary>
+    /// Adds Consul Key-Value (KV) configuration to the ConfigurationManager.
+    /// </summary>
+    /// <param name="configuration">The ConfigurationManager.</param>
+    /// <param name="settings">The ConsulKVSettings containing the configuration options.</param>
     private static void AddConsulKv(this ConfigurationManager configuration, ConsulKVSettings settings)
     {
         configuration.AddConsul(settings.Key, options =>
@@ -20,6 +28,10 @@ public static class ConfigurationExtensions
         });
     }
 
+    /// <summary>
+    /// Adds core configuration settings to the ConfigurationManager.
+    /// </summary>
+    /// <param name="configuration">The ConfigurationManager.</param>
     public static void AddCoreConfiguration(this ConfigurationManager configuration)
     {
         configuration.SetBasePath(Directory.GetCurrentDirectory())

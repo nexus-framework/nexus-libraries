@@ -7,8 +7,16 @@ using Nexus.Telemetry;
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;
 
+/// <summary>
+/// Provides extension methods for configuring dependency injection for core telemetry.
+/// </summary>
 public static class DependencyInjectionExtensions
 {
+    /// <summary>
+    /// Adds core telemetry services to the service collection.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <param name="configuration">The configuration object.</param>
     public static void AddCoreTelemetry(this IServiceCollection services, IConfiguration configuration)
     {
         TelemetrySettings telemetrySettings = new ();

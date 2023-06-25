@@ -7,8 +7,16 @@ using Serilog.Sinks.Elasticsearch;
 
 namespace Nexus.Logs;
 
+/// <summary>
+/// Provides extension methods for configuring core logging.
+/// </summary>
 public static class LoggingExtensions
 {
+    /// <summary>
+    /// Adds core logging services to the provided <see cref="ILoggingBuilder"/>.
+    /// </summary>
+    /// <param name="builder">The <see cref="ILoggingBuilder"/> to configure logging.</param>
+    /// <param name="configuration">The configuration object.</param>
     public static void AddCoreLogging(this ILoggingBuilder builder, IConfiguration configuration)
     {
         SerilogSettings serilogSettings = new ();
