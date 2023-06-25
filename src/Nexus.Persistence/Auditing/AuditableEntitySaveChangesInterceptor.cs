@@ -61,7 +61,7 @@ public class AuditableEntitySaveChangesInterceptor : SaveChangesInterceptor
             return;
         }
 
-        foreach (EntityEntry<AuditableEntityBase> entry in context.ChangeTracker.Entries<AuditableEntityBase>())
+        foreach (EntityEntry<AuditableNexusEntityBase> entry in context.ChangeTracker.Entries<AuditableNexusEntityBase>())
         {
             if (entry.State == EntityState.Added)
             {

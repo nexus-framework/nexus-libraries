@@ -5,7 +5,7 @@ namespace Nexus.Common;
 /// <summary>
 /// Represents an abstract base class for an auditable entity with string-based audit information.
 /// </summary>
-public abstract class AuditableEntityBase : EntityBase, IAuditable<string>
+public abstract class AuditableNexusEntityBase : NexusEntityBase, IAuditable<string>
 {
     /// <summary>
     /// Gets or sets the name of the user who created the entity.

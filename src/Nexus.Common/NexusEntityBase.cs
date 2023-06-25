@@ -5,7 +5,7 @@ namespace Nexus.Common;
 /// <summary>
 /// Represents an abstract base class for an entity with an integer identifier.
 /// </summary>
-public abstract class EntityBase : IEntity
+public abstract class NexusEntityBase : INexusEntity
 {
     /// <summary>
     /// Gets or sets the unique identifier of the entity.

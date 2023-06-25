@@ -8,8 +8,8 @@ namespace Nexus.Persistence;
 /// Implementation of the custom repository using Entity Framework for data access.
 /// </summary>
 /// <typeparam name="T">The type of entity.</typeparam>
-public class EfCustomRepository<T> : ICustomRepository<T>
-    where T : class, IEntity
+public class EfNexusRepository<T> : INexusRepository<T>
+    where T : class, INexusEntity
 {
     /// <summary>
     /// The <see cref="DbSet{TEntity}"/> representing the entities of type <typeparamref name="T"/>.
@@ -17,10 +17,10 @@ public class EfCustomRepository<T> : ICustomRepository<T>
     protected readonly DbSet<T> DbSet;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="EfCustomRepository{T}"/> class with the specified <see cref="DbContext"/>.
+    /// Initializes a new instance of the <see cref="EfNexusRepository{T}"/> class with the specified <see cref="DbContext"/>.
     /// </summary>
     /// <param name="context">The <see cref="DbContext"/> instance.</param>
-    protected EfCustomRepository(DbContext context)
+    protected EfNexusRepository(DbContext context)
     {
         DbSet = context.Set<T>();
     }

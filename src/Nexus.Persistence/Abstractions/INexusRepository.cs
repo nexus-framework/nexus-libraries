@@ -6,8 +6,8 @@ namespace Nexus.Persistence.Abstractions;
 /// Represents a custom repository interface for working with entities of type <typeparamref name="T"/>.
 /// </summary>
 /// <typeparam name="T">The type of entity.</typeparam>
-public interface ICustomRepository<T>
-    where T : class, IEntity
+public interface INexusRepository<T>
+    where T : class, INexusEntity
 {
     /// <summary>
     /// Retrieves all entities asynchronously.
