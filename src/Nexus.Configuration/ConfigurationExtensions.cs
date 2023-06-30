@@ -36,10 +36,14 @@ public static class ConfigurationExtensions
     {
         configuration.SetBasePath(Directory.GetCurrentDirectory())
             .AddEnvironmentVariables();
-
+        
         // Settings for consul kv
-        ConsulKVSettings consulKvSettings = new ();
-        configuration.GetRequiredSection("ConsulKV").Bind(consulKvSettings);
-        configuration.AddConsulKv(consulKvSettings);
+        bool configureKv = configuration.GetValue<bool>("FrameworkSettings:Discovery:Enable");
+        if (configureKv)
+        {
+            ConsulKVSettings consulKvSettings = new ();
+            configuration.GetRequiredSection("ConsulKV").Bind(consulKvSettings);
+            configuration.AddConsulKv(consulKvSettings);
+        }
     }
 }

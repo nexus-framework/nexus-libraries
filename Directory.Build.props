@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <NexusLibraryVersion>0.4.0.0</NexusLibraryVersion>
+        <NexusLibraryVersion>0.4.1.0</NexusLibraryVersion>
     </PropertyGroup>
     <PropertyGroup>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -21,6 +21,6 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/afroze9/nexus</RepositoryUrl>
-        <Version>$(NexusLibraryVersion)</Version>
+        <Version>0.4.1.0-preview1</Version>
     </PropertyGroup>
 </Project>
