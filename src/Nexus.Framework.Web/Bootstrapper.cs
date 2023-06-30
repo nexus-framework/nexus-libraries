@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nexus.Configuration;
+using Nexus.Framework.Web.Configuration;
+using Nexus.Framework.Web.Logging;
 using Nexus.Logs;
 using Serilog;
 
@@ -62,7 +64,7 @@ public abstract class Bootstrapper
     /// </summary>
     protected virtual void AddConfiguration()
     {
-        AppBuilder.Configuration.AddCoreConfiguration();
+        AppBuilder.Configuration.ConfigureWebFramework();
     }
 
     /// <summary>
@@ -70,7 +72,7 @@ public abstract class Bootstrapper
     /// </summary>
     protected virtual void AddLogging()
     {
-        AppBuilder.Logging.AddCoreLogging(AppBuilder.Configuration);
+        AppBuilder.Logging.ConfigureWebFrameworkLogging(AppBuilder.Configuration);
     }
 
     /// <summary>

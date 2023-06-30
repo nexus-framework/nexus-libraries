@@ -13,7 +13,7 @@ public static class ConfigurationExtensions
     /// </summary>
     /// <param name="configuration">The ConfigurationManager.</param>
     /// <param name="settings">The ConsulKVSettings containing the configuration options.</param>
-    private static void AddConsulKv(this ConfigurationManager configuration, ConsulKVSettings settings)
+    public static void AddConsulKv(this ConfigurationManager configuration, ConsulKVSettings settings)
     {
         configuration.AddConsul(settings.Key, options =>
         {
@@ -36,14 +36,5 @@ public static class ConfigurationExtensions
     {
         configuration.SetBasePath(Directory.GetCurrentDirectory())
             .AddEnvironmentVariables();
-        
-        // Settings for consul kv
-        bool configureKv = configuration.GetValue<bool>("FrameworkSettings:Discovery:Enable");
-        if (configureKv)
-        {
-            ConsulKVSettings consulKvSettings = new ();
-            configuration.GetRequiredSection("ConsulKV").Bind(consulKvSettings);
-            configuration.AddConsulKv(consulKvSettings);
-        }
     }
 }
