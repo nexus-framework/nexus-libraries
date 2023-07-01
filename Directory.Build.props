@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <NexusLibraryVersion>0.4.1.0</NexusLibraryVersion>
+        <NexusLibraryVersion>0.4.2.0</NexusLibraryVersion>
     </PropertyGroup>
     <PropertyGroup>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -10,6 +10,7 @@
         <Nullable>enable</Nullable>
         <OutputPath>$(SolutionDir)\artifacts\$(Configuration)\</OutputPath>
         <TargetFramework>net7.0</TargetFramework>
+        <PackageIcon>icon.png</PackageIcon>
     </PropertyGroup>
     <PropertyGroup>
         <AssemblyVersion>$(NexusLibraryVersion)</AssemblyVersion>
@@ -21,6 +22,6 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/afroze9/nexus</RepositoryUrl>
-        <Version>0.4.1.0</Version>
+        <Version>$(NexusLibraryVersion)</Version>
     </PropertyGroup>
 </Project>

@@ -13,3 +13,7 @@
 | [![Nexus.Management](https://img.shields.io/badge/nuget-Nexus.Management-blue)](https://www.nuget.org/packages/Nexus.Management/)          | ![Nexus.Management](https://img.shields.io/nuget/dt/Nexus.Management)       |
 | [![Nexus.Persistence](https://img.shields.io/badge/nuget-Nexus.Persistence-blue)](https://www.nuget.org/packages/Nexus.Persistence/)       | ![Nexus.Persistence](https://img.shields.io/nuget/dt/Nexus.Persistence)     |
 | [![Nexus.Telemetry](https://img.shields.io/badge/nuget-Nexus.Telemetry-blue)](https://www.nuget.org/packages/Nexus.Telemetry/)             | ![Nexus.Telemetry](https://img.shields.io/nuget/dt/Nexus.Telemetry)         |
+
+
+## Credits
+<a href="https://www.flaticon.com/free-icons/machine-learning" title="machine learning icons">Machine learning icons created by Becris - Flaticon</a>
