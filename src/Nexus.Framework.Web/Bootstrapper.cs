@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Nexus.Configuration;
 using Nexus.Framework.Web.Configuration;
 using Nexus.Framework.Web.Logging;
-using Nexus.Logs;
 using Serilog;
 
 namespace Nexus.Framework.Web;
@@ -19,15 +18,18 @@ public abstract class Bootstrapper
     /// </summary>
     protected string[] Args;
 
+
     /// <summary>
     /// The <see cref="WebApplicationBuilder"/> used to build the web application.
     /// </summary>
     protected readonly WebApplicationBuilder AppBuilder;
 
+
     /// <summary>
     /// The built <see cref="WebApplication"/> instance.
     /// </summary>
     protected WebApplication App = null!;
+
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Bootstrapper"/> class.
@@ -88,8 +90,11 @@ public abstract class Bootstrapper
     /// </summary>
     protected virtual void ConfigureMiddleware()
     {
+        FrameworkSettings settings = new ();
+        App.Configuration.GetRequiredSection(nameof(FrameworkSettings)).Bind(settings);
+
         // This is the default middleware order
-        if (App.Environment.IsDevelopment())
+        if (App.Environment.IsDevelopment() && settings.Swagger is { Enable: true })
         {
             App.UseSwagger();
             App.UseSwaggerUI();
@@ -97,10 +102,16 @@ public abstract class Bootstrapper
 
         App.UseHttpsRedirection();
         App.UseCors("AllowAll");
-        App.UseAuthentication();
-        App.UseAuthorization();
 
-        // TODO: Can probably read config, get frameworksettings, check if telemetry is enabled 
-        App.UseOpenTelemetryPrometheusScrapingEndpoint();
+        if (settings.Auth is { Enable: true })
+        {
+            App.UseAuthentication();
+            App.UseAuthorization();
+        }
+
+        if (settings.Telemetry is { Enable: true })
+        {
+            App.UseOpenTelemetryPrometheusScrapingEndpoint();
+        }
     }
 }
