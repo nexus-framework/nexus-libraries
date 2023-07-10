@@ -35,6 +35,8 @@ public static class ConfigurationExtensions
     public static void AddCoreConfiguration(this ConfigurationManager configuration)
     {
         configuration.SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.Global.json", optional: true)
+            .AddJsonFile("appsettings.json", optional: true)
             .AddEnvironmentVariables();
     }
 }
