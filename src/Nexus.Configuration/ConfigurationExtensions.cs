@@ -12,20 +12,37 @@ public static class ConfigurationExtensions
     /// Adds Consul Key-Value (KV) configuration to the ConfigurationManager.
     /// </summary>
     /// <param name="configuration">The ConfigurationManager.</param>
-    /// <param name="settings">The ConsulKVSettings containing the configuration options.</param>
-    public static void AddConsulKv(this ConfigurationManager configuration, ConsulKVSettings settings)
+    /// <param name="key">The key of the key-value pair to retrieve.</param>
+    /// <param name="url">The url to Consul KV server.</param>
+    /// <param name="token">The token to access the key-value pair.</param>
+    private static void AddConsulKv(this ConfigurationManager configuration, string key, string url, string token)
     {
-        configuration.AddConsul(settings.Key, options =>
+        configuration.AddConsul(key, options =>
         {
             options.ConsulConfigurationOptions = config =>
             {
-                config.Address = new Uri(settings.Url);
-                config.Token = settings.Token;
+                config.Address = new Uri(url);
+                config.Token = token;
             };
 
             options.Optional = false;
             options.ReloadOnChange = true;
-        });
+        });        
+    }
+    
+    /// <summary>
+    /// Adds Consul Key-Value (KV) configuration to the ConfigurationManager.
+    /// </summary>
+    /// <param name="configuration">The ConfigurationManager.</param>
+    /// <param name="settings">The ConsulKVSettings containing the configuration options.</param>
+    public static void AddConsulKv(this ConfigurationManager configuration, ConsulKVSettings settings)
+    {
+        configuration.AddConsulKv(settings.Key, settings.Url, settings.Token);
+        
+        if (settings.AddGlobalConfig)
+        {
+            configuration.AddConsulKv(settings.GlobalConfigKey, settings.Url, settings.Token);
+        }
     }
 
     /// <summary>

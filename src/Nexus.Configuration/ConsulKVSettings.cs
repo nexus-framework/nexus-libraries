@@ -28,4 +28,14 @@ public class ConsulKVSettings
     ///     This is the key of the key-value pair to retrieve from Consul's key-value store.
     /// </remarks>
     public string Key { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets whether to add global configuration KV.
+    /// </summary>
+    public bool AddGlobalConfig { get; set; } = false;
+
+    /// <summary>
+    /// Gets or sets the key of the global key-value pair to retrieve.
+    /// </summary>
+    public string GlobalConfigKey { get; set; } = string.Empty;
 }
