@@ -7,7 +7,7 @@ public class SerilogSettingsTests
     public void SerilogSettings_ElasticSearchSettings_NotNull()
     {
         // Arrange
-        var settings = new SerilogSettings();
+        SerilogSettings settings = new();
 
         // Assert
         Assert.NotNull(settings.ElasticSearchSettings);
@@ -17,8 +17,8 @@ public class SerilogSettingsTests
     public void SerilogElasticSearchSettings_Uri_SetAndGet()
     {
         // Arrange
-        var uri = "http://localhost:9200";
-        var elasticSearchSettings = new SerilogElasticSearchSettings()
+        string uri = "http://localhost:9200";
+        SerilogElasticSearchSettings elasticSearchSettings = new()
         {
             Uri = uri,
             Username = "test",
@@ -27,7 +27,7 @@ public class SerilogSettingsTests
 
         // Act
         elasticSearchSettings.Uri = uri;
-        var result = elasticSearchSettings.Uri;
+        string result = elasticSearchSettings.Uri;
 
         // Assert
         Assert.Equal(uri, result);
@@ -37,8 +37,8 @@ public class SerilogSettingsTests
     public void SerilogElasticSearchSettings_Username_SetAndGet()
     {
         // Arrange
-        var username = "myUsername";
-        var elasticSearchSettings = new SerilogElasticSearchSettings()
+        string username = "myUsername";
+        SerilogElasticSearchSettings elasticSearchSettings = new()
         {
             Uri = "http://localhost:9200",
             Username = username,
@@ -47,7 +47,7 @@ public class SerilogSettingsTests
 
         // Act
         elasticSearchSettings.Username = username;
-        var result = elasticSearchSettings.Username;
+        string result = elasticSearchSettings.Username;
 
         // Assert
         Assert.Equal(username, result);
@@ -57,8 +57,8 @@ public class SerilogSettingsTests
     public void SerilogElasticSearchSettings_Password_SetAndGet()
     {
         // Arrange
-        var password = "myPassword";
-        var elasticSearchSettings = new SerilogElasticSearchSettings()
+        string password = "myPassword";
+        SerilogElasticSearchSettings elasticSearchSettings = new()
         {
             Uri = "http://localhost:9200",
             Username = "test",
@@ -67,7 +67,7 @@ public class SerilogSettingsTests
 
         // Act
         elasticSearchSettings.Password = password;
-        var result = elasticSearchSettings.Password;
+        string result = elasticSearchSettings.Password;
 
         // Assert
         Assert.Equal(password, result);
@@ -77,17 +77,17 @@ public class SerilogSettingsTests
     public void SerilogElasticSearchSettings_IndexFormat_SetAndGet()
     {
         // Arrange
-        var elasticSearchSettings = new SerilogElasticSearchSettings()
+        SerilogElasticSearchSettings elasticSearchSettings = new()
         {
             Uri = "http://localhost:9200",
             Username = "test",
             Password = "test"
         };
-        var indexFormat = "logs-{0:yyyy.MM.dd}";
+        string indexFormat = "logs-{0:yyyy.MM.dd}";
 
         // Act
         elasticSearchSettings.IndexFormat = indexFormat;
-        var result = elasticSearchSettings.IndexFormat;
+        string result = elasticSearchSettings.IndexFormat;
 
         // Assert
         Assert.Equal(indexFormat, result);
@@ -97,7 +97,7 @@ public class SerilogSettingsTests
     public void SerilogSettings_ElasticSearchSettings_SetAndGet()
     {
         // Arrange
-        var serilogSettings = new SerilogSettings();
+        SerilogSettings serilogSettings = new();
         serilogSettings.ElasticSearchSettings = new SerilogElasticSearchSettings()
         {
             Uri = "http://localhost:9200",
