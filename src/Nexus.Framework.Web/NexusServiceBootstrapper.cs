@@ -11,7 +11,7 @@ namespace Nexus.Framework.Web;
 /// <summary>
 /// Base class for bootstrapping a web application.
 /// </summary>
-public abstract class Bootstrapper
+public abstract class NexusServiceBootstrapper
 {
     /// <summary>
     /// The command-line arguments passed to the application.
@@ -32,10 +32,10 @@ public abstract class Bootstrapper
 
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Bootstrapper"/> class.
+    /// Initializes a new instance of the <see cref="NexusServiceBootstrapper"/> class.
     /// </summary>
     /// <param name="args">The command-line arguments passed to the application.</param>
-    protected Bootstrapper(string[] args)
+    protected NexusServiceBootstrapper(string[] args)
     {
         Args = args;
         AppBuilder = WebApplication.CreateBuilder(args);

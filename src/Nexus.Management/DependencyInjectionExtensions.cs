@@ -17,7 +17,7 @@ public static class DependencyInjectionExtensions
     /// </summary>
     /// <param name="services">The service collection to add the actuators to.</param>
     /// <param name="configuration">The configuration to use for the actuators.</param>
-    public static void AddCoreActuators(this IServiceCollection services, IConfiguration configuration)
+    public static void AddNexusActuators(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHealthActuator(configuration);
         services.AddInfoActuator(configuration);

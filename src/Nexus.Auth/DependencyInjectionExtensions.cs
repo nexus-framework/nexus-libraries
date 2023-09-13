@@ -56,7 +56,7 @@ public static class DependencyInjectionExtensions
     /// <param name="services">The service collection.</param>
     /// <param name="configuration">The configuration object.</param>
     /// <param name="policies">The list of CRUD policies.</param>
-    private static void AddCoreAuth(this IServiceCollection services, IConfiguration configuration, List<string> policies)
+    private static void AddNexusAuth(this IServiceCollection services, IConfiguration configuration, List<string> policies)
     {
         Auth0Settings auth0Settings = new ();
         configuration.GetRequiredSection(nameof(Auth0Settings)).Bind(auth0Settings);
@@ -81,10 +81,10 @@ public static class DependencyInjectionExtensions
     /// <param name="services">The service collection.</param>
     /// <param name="configuration">The configuration object.</param>
     /// <param name="resourceName">The name of the resource.</param>
-    public static void AddCoreAuth(this IServiceCollection services, IConfiguration configuration, string resourceName)
+    public static void AddNexusAuth(this IServiceCollection services, IConfiguration configuration, string resourceName)
     {
         List<string> policies = GetCrudPolicies(resourceName);
-        services.AddCoreAuth(configuration, policies);
+        services.AddNexusAuth(configuration, policies);
     }
 
     /// <summary>
@@ -94,9 +94,9 @@ public static class DependencyInjectionExtensions
     /// <param name="configuration">The configuration object.</param>
     /// <param name="resourceName">The name of the resource.</param>
     /// <param name="resourceActions">The list of actions for the resource.</param>
-    public static void AddCoreAuth(this IServiceCollection services, IConfiguration configuration, string resourceName, List<string> resourceActions)
+    public static void AddNexusAuth(this IServiceCollection services, IConfiguration configuration, string resourceName, List<string> resourceActions)
     {
         List<string> policies = GetCrudPolicies(resourceName, resourceActions);
-        services.AddCoreAuth(configuration, policies);
+        services.AddNexusAuth(configuration, policies);
     }
 }

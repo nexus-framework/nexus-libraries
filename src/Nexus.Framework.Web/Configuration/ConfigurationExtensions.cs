@@ -14,7 +14,7 @@ public static class ConfigurationExtensions
     /// <param name="configuration"></param>
     public static void ConfigureWebFramework(this ConfigurationManager configuration)
     {
-        configuration.AddCoreConfiguration();
+        configuration.AddNexusConfiguration();
         
         // Settings for consul kv
         bool configureKv = configuration.GetValue<bool>("FrameworkSettings:Discovery:Enable");

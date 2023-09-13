@@ -37,10 +37,12 @@ public static class ConfigurationExtensions
     /// <param name="settings">The ConsulKVSettings containing the configuration options.</param>
     public static void AddConsulKv(this ConfigurationManager configuration, ConsulKVSettings settings)
     {
+        // Config specific to the service
         configuration.AddConsulKv(settings.Key, settings.Url, settings.Token);
         
         if (settings.AddGlobalConfig)
         {
+            // Config applicable to all services
             configuration.AddConsulKv(settings.GlobalConfigKey, settings.Url, settings.Token);
         }
     }
@@ -49,7 +51,7 @@ public static class ConfigurationExtensions
     /// Adds core configuration settings to the ConfigurationManager.
     /// </summary>
     /// <param name="configuration">The ConfigurationManager.</param>
-    public static void AddCoreConfiguration(this ConfigurationManager configuration)
+    public static void AddNexusConfiguration(this ConfigurationManager configuration)
     {
         configuration.SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
             .AddJsonFile("appsettings.Global.json", optional: true)

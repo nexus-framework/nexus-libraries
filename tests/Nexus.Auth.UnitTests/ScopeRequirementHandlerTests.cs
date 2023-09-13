@@ -1,5 +1,6 @@
 ﻿namespace Nexus.Auth.UnitTests;
 
+[ExcludeFromCodeCoverage]
 public class ScopeRequirementHandlerTests
 {
     [Fact]

@@ -17,7 +17,7 @@ public static class LoggingExtensions
     /// </summary>
     /// <param name="builder">The <see cref="ILoggingBuilder"/> to configure logging.</param>
     /// <param name="configuration">The configuration object.</param>
-    public static void AddCoreLogging(this ILoggingBuilder builder, IConfiguration configuration)
+    public static void AddNexusLogging(this ILoggingBuilder builder, IConfiguration configuration)
     {
         SerilogSettings serilogSettings = new ();
         configuration.GetRequiredSection(nameof(SerilogSettings)).Bind(serilogSettings);
@@ -27,9 +27,10 @@ public static class LoggingExtensions
             .WriteTo.Console()
             .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(serilogSettings.ElasticSearchSettings.Uri))
             {
-                ModifyConnectionSettings = c =>
-                    c
-                        .BasicAuthentication(serilogSettings.ElasticSearchSettings.Username,
+                ModifyConnectionSettings = connectionConfiguration =>
+                    connectionConfiguration
+                        .BasicAuthentication(
+                            serilogSettings.ElasticSearchSettings.Username, 
                             serilogSettings.ElasticSearchSettings.Password)
                         .ServerCertificateValidationCallback((a, b, c, d) => true),
                 AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv8,

@@ -21,7 +21,7 @@ public static class LoggingExtensions
         configuration.GetRequiredSection(nameof(FrameworkSettings)).Bind(settings);
         if (settings.Logging is { Enable: true })
         {
-            builder.AddCoreLogging(configuration);
+            builder.AddNexusLogging(configuration);
         }
     }
 }

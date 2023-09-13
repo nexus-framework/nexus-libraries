@@ -94,12 +94,12 @@ public static class DependencyInjectionExtensions
         
         if (settings.Telemetry is { Enable: true })
         {
-            services.AddCoreTelemetry(configuration);
+            services.AddNexusTelemetry(configuration);
         }
 
         if (settings.Management is { Enable: true })
         {
-            services.AddCoreActuators(configuration);
+            services.AddNexusActuators(configuration);
         }
 
         if (settings.Discovery is { Enable: true })
@@ -109,7 +109,7 @@ public static class DependencyInjectionExtensions
 
         if (settings.Auth is { Enable: true })
         {
-            services.AddCoreAuth(configuration, settings.Auth.ResourceName);
+            services.AddNexusAuth(configuration, settings.Auth.ResourceName);
         }
 
         services.AddHttpContextAccessor();

@@ -17,7 +17,7 @@ public static class DependencyInjectionExtensions
     /// </summary>
     /// <param name="services">The service collection.</param>
     /// <param name="configuration">The configuration object.</param>
-    public static void AddCoreTelemetry(this IServiceCollection services, IConfiguration configuration)
+    public static void AddNexusTelemetry(this IServiceCollection services, IConfiguration configuration)
     {
         TelemetrySettings telemetrySettings = new ();
         configuration.GetRequiredSection(nameof(TelemetrySettings)).Bind(telemetrySettings);

@@ -25,7 +25,7 @@ public static class DependencyInjectionExtensions
     /// Additionally, it adds the PostgreSQL health contributor, which enables health checks for the PostgreSQL database
     /// using the configuration provided.
     /// </remarks>
-    public static void AddCorePersistence<TContext>(this IServiceCollection services, IConfiguration configuration)
+    public static void AddNexusPersistence<TContext>(this IServiceCollection services, IConfiguration configuration)
         where TContext : DbContext
     {
         services.AddDbContext<TContext>(options => { options.UseNpgsql(configuration); });
