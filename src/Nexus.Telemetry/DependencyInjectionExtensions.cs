@@ -3,6 +3,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Nexus.Telemetry;
+using OpenTelemetry;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection;
@@ -61,5 +62,25 @@ public static class DependencyInjectionExtensions
                     .AddHttpClientInstrumentation()
                     .AddPrometheusExporter();
             });
+    }
+
+    /// <summary>
+    /// Adds Nexus meters to the OpenTelemetry configuration for monitoring purposes.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add the meters to.</param>
+    /// <param name="serviceName">The name of the service.</param>
+    /// <param name="meterNames">An array of meter names to be added.</param>
+    public static void AddNexusMeters(this IServiceCollection services, string serviceName, string[] meterNames)
+    {
+        OpenTelemetryBuilder telemetryBuilder = services.AddOpenTelemetry()
+            .ConfigureResource(options => options.AddService(serviceName));
+        
+        if (meterNames.Length > 0)
+        {
+            telemetryBuilder.WithMetrics(builder =>
+            {
+                builder.AddMeter(meterNames);
+            });
+        }
     }
 }

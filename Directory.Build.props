@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <NexusLibraryVersion>0.10.0.0</NexusLibraryVersion>
+        <NexusLibraryVersion>0.11.0.0</NexusLibraryVersion>
     </PropertyGroup>
     <PropertyGroup>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>

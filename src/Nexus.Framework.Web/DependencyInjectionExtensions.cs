@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using Nexus.Framework.Web.Configuration;
@@ -6,6 +7,7 @@ using Nexus.Framework.Web.Filters;
 using Nexus.Framework.Web.Services;
 using Nexus.Management;
 using Nexus.Persistence.Auditing;
+using Steeltoe.Common.Http.Discovery;
 using Steeltoe.Discovery.Client;
 
 // ReSharper disable once CheckNamespace
@@ -120,5 +122,58 @@ public static class DependencyInjectionExtensions
         {
             options.AddPolicy("AllowAll", policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
         });
+    }
+
+    /// <summary>
+    /// Adds a Nexus typed HTTP client to the <see cref="IServiceCollection"/>.
+    /// </summary>
+    /// <typeparam name="TClient">The type of the client interface.</typeparam>
+    /// <typeparam name="TImplementation">The type of the client implementation.</typeparam>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add the client to.</param>
+    /// <param name="configuration">The <see cref="IConfiguration"/> used to retrieve framework settings.</param>
+    /// <param name="clientName">The name of the HTTP client to configure.</param>
+    public static void AddNexusTypedClient<TClient, TImplementation>(this IServiceCollection services, IConfiguration configuration, string clientName)
+        where TClient : class
+        where TImplementation : class, TClient
+    {
+        FrameworkSettings settings = new ();
+        configuration.GetRequiredSection(nameof(FrameworkSettings)).Bind(settings);
+        
+        IHttpClientBuilder clientBuilder = services.AddHttpClient(clientName);
+        if (settings.Discovery is { Enable: true })
+        {
+            clientBuilder.AddServiceDiscovery();
+        }
+        
+        clientBuilder
+            .AddServiceDiscovery()
+            .ConfigureHttpClient((serviceProvider, options) =>
+            {
+                IHttpContextAccessor httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+
+                if (httpContextAccessor.HttpContext == null)
+                {
+                    return;
+                }
+
+                string? bearerToken = httpContextAccessor.HttpContext.Request.Headers["Authorization"]
+                    .FirstOrDefault(h =>
+                        !string.IsNullOrEmpty(h) &&
+                        h.StartsWith("bearer ", StringComparison.InvariantCultureIgnoreCase));
+
+                if (!string.IsNullOrEmpty(bearerToken))
+                {
+                    options.DefaultRequestHeaders.Add("Authorization", bearerToken);
+                }
+            })
+            .ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                return new HttpClientHandler
+                {
+                    ClientCertificateOptions = ClientCertificateOption.Manual,
+                    ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
+                };
+            })
+            .AddTypedClient<TClient, TImplementation>();
     }
 }
