@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Nexus.Common.Abstractions.Common;
+using Nexus.Common.Abstractions;
 using Nexus.Persistence.Abstractions;
 
 namespace Nexus.Persistence;

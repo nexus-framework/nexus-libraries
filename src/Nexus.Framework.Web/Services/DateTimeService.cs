@@ -1,10 +1,12 @@
-﻿using Nexus.Persistence.Auditing;
+﻿using Nexus.Common.Attributes;
+using Nexus.Persistence.Auditing;
 
 namespace Nexus.Framework.Web.Services;
 
 /// <summary>
 /// Represents a service for retrieving the current date and time.
 /// </summary>
+[NexusService<IDateTime>(NexusServiceLifeTime.Singleton)]
 public class DateTimeService : IDateTime
 {
     /// <summary>

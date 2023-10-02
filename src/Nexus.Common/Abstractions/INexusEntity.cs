@@ -1,4 +1,4 @@
-﻿namespace Nexus.Common.Abstractions.Common;
+﻿namespace Nexus.Common.Abstractions;
 
 /// <summary>
 /// Represents an entity with an integer identifier.

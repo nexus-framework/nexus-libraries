@@ -1,4 +1,4 @@
-﻿namespace Nexus.Common.Abstractions.Common;
+﻿namespace Nexus.Common.Abstractions;
 
 /// <summary>
 ///     Interface for auditable types.

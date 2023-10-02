@@ -2,11 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
+using Nexus.Common.Attributes;
 using Nexus.Framework.Web.Configuration;
 using Nexus.Framework.Web.Filters;
-using Nexus.Framework.Web.Services;
 using Nexus.Management;
-using Nexus.Persistence.Auditing;
 using Steeltoe.Common.Http.Discovery;
 using Steeltoe.Discovery.Client;
 
@@ -68,6 +67,57 @@ public static class DependencyInjectionExtensions
         });
     }
 
+    private static void AddNexusServices(this IServiceCollection services)
+    {
+        Type[] allTypes = Assembly.GetCallingAssembly().GetTypes();
+        
+        IEnumerable<Type> genericNexusServiceTypes =
+            allTypes.Where(t => t.GetCustomAttributes(typeof(NexusServiceAttribute<>), true).Length > 0);
+        IEnumerable<Type> nexusServiceTypes =
+            allTypes.Where(t => t.GetCustomAttributes(typeof(NexusServiceAttribute), true).Length > 0);
+        
+        // INexusService<T>
+        foreach (Type type in genericNexusServiceTypes)
+        {
+            Attribute attribute = type.GetCustomAttribute(typeof(NexusServiceAttribute<>))!;
+            Type genericType = attribute.GetType().GetGenericArguments()[0];
+            INexusAttribute nexusAttribute = (attribute as INexusAttribute)!;
+
+            switch (nexusAttribute.Lifetime)
+            {
+                case NexusServiceLifeTime.Scoped:
+                    services.AddScoped(type, genericType);
+                    break;
+                case NexusServiceLifeTime.Singleton:
+                    services.AddSingleton(type, genericType);
+                    break;
+                case NexusServiceLifeTime.Transient:
+                    services.AddTransient(type, genericType);
+                    break;
+            }
+        }
+        
+        // INexusService
+        foreach (Type type in nexusServiceTypes)
+        {
+            Attribute attribute = type.GetCustomAttribute(typeof(NexusServiceAttribute<>))!;
+            INexusAttribute nexusAttribute = (attribute as INexusAttribute)!;
+
+            switch (nexusAttribute.Lifetime)
+            {
+                case NexusServiceLifeTime.Scoped:
+                    services.AddScoped(type);
+                    break;
+                case NexusServiceLifeTime.Singleton:
+                    services.AddSingleton(type);
+                    break;
+                case NexusServiceLifeTime.Transient:
+                    services.AddTransient(type);
+                    break;
+            }
+        }
+    }
+    
     /// <summary>
     /// Adds core services and features to the service collection based on the specified configuration.
     /// </summary>
@@ -115,13 +165,12 @@ public static class DependencyInjectionExtensions
         }
 
         services.AddHttpContextAccessor();
-        services.AddSingleton<ICurrentUserService, CurrentUserService>();
-        services.AddSingleton<IDateTime, DateTimeService>();
-        
         services.AddCors(options =>
         {
             options.AddPolicy("AllowAll", policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
         });
+        
+        services.AddNexusServices();
     }
 
     /// <summary>
