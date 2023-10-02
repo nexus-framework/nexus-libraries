@@ -1,4 +1,4 @@
-﻿using Nexus.Common.Abstractions.Common;
+﻿using Nexus.Common.Abstractions;
 
 namespace Nexus.Common;
 
