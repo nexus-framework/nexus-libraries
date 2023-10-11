@@ -99,7 +99,7 @@ public static class DependencyInjectionExtensions
         // INexusService
         foreach (Type type in nexusServiceTypes)
         {
-            Attribute attribute = type.GetCustomAttribute(typeof(NexusServiceAttribute<>))!;
+            Attribute attribute = type.GetCustomAttribute(typeof(NexusServiceAttribute))!;
             INexusAttribute nexusAttribute = (attribute as INexusAttribute)!;
 
             switch (nexusAttribute.Lifetime)
