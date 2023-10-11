@@ -120,7 +120,7 @@ public static class DependencyInjectionExtensions
     private static void AddNexusServices(this IServiceCollection services)
     {
         services.AddNexusServices(typeof(DependencyInjectionExtensions).Assembly);
-        services.AddNexusServices(Assembly.GetCallingAssembly());
+        services.AddNexusServices(Assembly.GetEntryAssembly()!);
     }
     
     /// <summary>
