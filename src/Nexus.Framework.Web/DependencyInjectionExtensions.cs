@@ -67,10 +67,9 @@ public static class DependencyInjectionExtensions
         });
     }
 
-    private static void AddNexusServices(this IServiceCollection services)
+    private static void AddNexusServices(this IServiceCollection services, Assembly assembly)
     {
-        Type[] allTypes = Assembly.GetCallingAssembly().GetTypes();
-        
+        Type[] allTypes = assembly.GetTypes();
         IEnumerable<Type> genericNexusServiceTypes =
             allTypes.Where(t => t.GetCustomAttributes(typeof(NexusServiceAttribute<>), true).Length > 0);
         IEnumerable<Type> nexusServiceTypes =
@@ -116,6 +115,12 @@ public static class DependencyInjectionExtensions
                     break;
             }
         }
+    }
+
+    private static void AddNexusServices(this IServiceCollection services)
+    {
+        services.AddNexusServices(typeof(DependencyInjectionExtensions).Assembly);
+        services.AddNexusServices(Assembly.GetCallingAssembly());
     }
     
     /// <summary>
