@@ -85,13 +85,13 @@ public static class DependencyInjectionExtensions
             switch (nexusAttribute.Lifetime)
             {
                 case NexusServiceLifeTime.Scoped:
-                    services.AddScoped(type, genericType);
+                    services.AddScoped( genericType, type);
                     break;
                 case NexusServiceLifeTime.Singleton:
-                    services.AddSingleton(type, genericType);
+                    services.AddSingleton(genericType, type);
                     break;
                 case NexusServiceLifeTime.Transient:
-                    services.AddTransient(type, genericType);
+                    services.AddTransient(genericType, type);
                     break;
             }
         }
