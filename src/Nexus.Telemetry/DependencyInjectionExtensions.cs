@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Reflection;
+using Microsoft.Extensions.Configuration;
+using Nexus.Common.Attributes;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -62,6 +64,24 @@ public static class DependencyInjectionExtensions
                     .AddHttpClientInstrumentation()
                     .AddPrometheusExporter();
             });
+        
+        services.AddNexusMeters(telemetrySettings, Assembly.GetEntryAssembly()!);
+    }
+
+    private static void AddNexusMeters(this IServiceCollection services, TelemetrySettings telemetrySettings, Assembly assembly)
+    {
+        Type[] allTypes = assembly.GetTypes();
+        IEnumerable<Type> meterTypes =
+            allTypes.Where(t => t.GetCustomAttributes(typeof(NexusMeterAttribute), true).Length > 0);
+
+        string[] meterNames = meterTypes.Select(type =>
+        {
+            Attribute attribute = type.GetCustomAttribute(typeof(NexusServiceAttribute))!;
+            INexusMeterAttribute meterAttribute = (attribute as INexusMeterAttribute)!;
+            return meterAttribute.Name;
+        }).ToArray();
+        
+        services.AddNexusMeters(telemetrySettings.ServiceName, meterNames);
     }
 
     /// <summary>

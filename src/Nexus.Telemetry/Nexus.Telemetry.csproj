@@ -26,4 +26,8 @@
         <None Include="LICENSE.txt" Pack="true" PackagePath="\" />
         <None Include="../../assets/icon.png" Pack="true" PackagePath="\" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Nexus.Common\Nexus.Common.csproj" />
+    </ItemGroup>
 </Project>
