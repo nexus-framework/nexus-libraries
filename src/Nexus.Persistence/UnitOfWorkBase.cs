@@ -28,16 +28,26 @@ public class UnitOfWorkBase : IUnitOfWork
     {
         _transaction = _context.Database.BeginTransaction();
     }
-
+    
     /// <summary>
     /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
     /// </summary>
     public void Dispose()
     {
-        _transaction?.Dispose();
-        _context?.Dispose();
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
+    
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _transaction?.Dispose();
+            _context?.Dispose();
+        }
+    }
+    
     /// <summary>
     /// Commits the changes made in the unit of work to the underlying database.
     /// </summary>
