@@ -18,17 +18,39 @@ variables:
 
 steps:
 - task: DotNetCoreCLI@2
+  displayName: 'Dotnet Restore'
   inputs:
     command: 'restore'
     projects: '$(solution)'
 
+- task: SonarCloudPrepare@1
+  displayName: 'Prepare SonarCloud Analysis'
+  inputs:
+    SonarCloud: 'SonarCloud'
+    organization: 'nexus-framework'
+    scannerMode: 'MSBuild'
+    projectKey: 'nexus-framework.nexus.libraries'
+    projectName: 'Nexus Libraries'
+
 - task: DotNetCoreCLI@2
+  displayName: 'Dotnet Build'
   inputs:
     command: 'build'
     projects: '$(solution)'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Dotnet Test'
   inputs:
     command: 'test'
     projects: '$(solution)'
     arguments: '-s $(runSettingsFile)'
+
+- task: SonarCloudAnalyze@1
+  displayName: 'Run SonarCloud Analysis'
+  inputs:
+    jdkversion: 'JAVA_HOME_17_X64'
+
+- task: SonarCloudPublish@1
+  displayName: 'Publish SonarCloud Results'
+  inputs:
+    pollingTimeoutSec: '300'
