@@ -15,8 +15,10 @@ public class ScopeRequirementHandler : AuthorizationHandler<ScopeRequirement>
         Claim? scopeClaim =
             context.User.Claims.FirstOrDefault(c => string.Equals(c.Type, "scope", StringComparison.OrdinalIgnoreCase));
 
-        if (scopeClaim is not null && scopeClaim.Value.Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                .Any(c => string.Equals(c, requirement.Scope, StringComparison.OrdinalIgnoreCase)))
+        if (scopeClaim is not null && scopeClaim.Value
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                .ToList()
+                .Exists(c => string.Equals(c, requirement.Scope, StringComparison.OrdinalIgnoreCase)))
         {
             // The user has the required scope, so the requirement is satisfied.
             context.Succeed(requirement);

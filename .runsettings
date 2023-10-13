@@ -8,7 +8,6 @@
                         <ModulePaths>
                             <Exclude>
                                 <ModulePath>Serilog.*</ModulePath>
-                                <ModulePath>*.UnitTests.*</ModulePath>
                             </Exclude>
                         </ModulePaths>
                     </CodeCoverage>
@@ -20,7 +19,6 @@
                         <ModulePaths>
                             <Exclude>
                                 <ModulePath>Serilog.*</ModulePath>
-                                <ModulePath>*.UnitTests.*</ModulePath>
                             </Exclude>
                         </ModulePaths>
                     </CodeCoverage>

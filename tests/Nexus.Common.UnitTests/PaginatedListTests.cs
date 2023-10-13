@@ -1,5 +1,6 @@
 ﻿namespace Nexus.Common.UnitTests;
 
+[ExcludeFromCodeCoverage]
 public class PaginatedListTests
 {
     [Fact]
