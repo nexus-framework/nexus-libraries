@@ -12,6 +12,7 @@ pool:
 
 variables:
   solution: '**/*.sln'
+  runSettingsFile: '.runsettings'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -30,4 +31,4 @@ steps:
   inputs:
     command: 'test'
     projects: '$(solution)'
-    arguments: '--collect "Code coverage"'
+    arguments: '-s $(runSettingsFile)'
