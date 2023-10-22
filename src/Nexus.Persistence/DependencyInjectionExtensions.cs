@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Nexus.Persistence;
 using Nexus.Persistence.Auditing;
 using Steeltoe.Connector.PostgreSql;
 using Steeltoe.Connector.PostgreSql.EFCore;
@@ -33,4 +35,42 @@ public static class DependencyInjectionExtensions
         services.AddPostgresHealthContributor(configuration);
     }
 
+    /// <summary>
+    /// Adds core persistence-related services to the service collection.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to add the services to.</param>
+    /// <param name="configuration">The <see cref="IConfiguration"/> containing the configuration settings.</param>
+    /// <param name="assembly">The assembly containing the DbContexts to add.</param>
+    public static void AddNexusPersistence(this IServiceCollection services, IConfiguration configuration, Assembly assembly)
+    {
+        List<Type> dbContextTypes = assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(AuditableDbContext))).ToList();
+        if (dbContextTypes.Count == 0)
+        {
+            return;
+        }
+        
+        Type extensionMethodClassType = typeof(EntityFrameworkServiceCollectionExtensions);
+        MethodInfo[] extensionMethods = extensionMethodClassType.GetMethods(BindingFlags.Static | BindingFlags.Public);
+        MethodInfo? addDbContextMethod = extensionMethods.FirstOrDefault(method => method.Name == "AddDbContext" && method.GetGenericArguments().Length == 1);
+        if (addDbContextMethod == null)
+        {
+            throw new NexusPersistenceException(NexusPersistenceException.UnableToRegisterNexusPersistence);
+        }
+        
+        foreach (Type dbContextType in dbContextTypes)
+        {
+            MethodInfo genericMethod = addDbContextMethod.MakeGenericMethod(dbContextType);
+            object[] parameters =
+            {
+                services,
+                new Action<DbContextOptionsBuilder>(options => options.UseNpgsql(configuration)),
+                ServiceLifetime.Scoped,
+                ServiceLifetime.Scoped
+            };
+            genericMethod.Invoke(null, parameters);
+        }
+        
+        services.AddScoped<AuditableEntitySaveChangesInterceptor>();
+        services.AddPostgresHealthContributor(configuration);
+    }
 }

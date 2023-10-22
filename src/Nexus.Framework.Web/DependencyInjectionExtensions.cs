@@ -254,5 +254,6 @@ public static class DependencyInjectionExtensions
         
         services.AddNexusServices();
         services.AddNexusTypedClients(configuration, Assembly.GetEntryAssembly()!);
+        services.AddNexusPersistence(configuration, Assembly.GetEntryAssembly()!);
     }
 }
