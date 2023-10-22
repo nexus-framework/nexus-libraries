@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nexus.Framework.Web.Configuration;
 using Nexus.Framework.Web.Logging;
+using Nexus.Persistence;
 using Serilog;
 
 namespace Nexus.Framework.Web;
@@ -112,6 +115,24 @@ public abstract class NexusServiceBootstrapper
         if (settings.Telemetry is { Enable: true })
         {
             App.UseOpenTelemetryPrometheusScrapingEndpoint();
+        }
+
+        ApplyMigrations();
+    }
+
+    private void ApplyMigrations()
+    {
+        List<Type> dbContextTypes = Assembly.GetEntryAssembly()!.GetTypes().Where(t => t.IsSubclassOf(typeof(AuditableDbContext))).ToList();
+        if (dbContextTypes.Count == 0)
+        {
+            return;
+        }
+        
+        using IServiceScope scope = App.Services.CreateScope();
+        foreach (Type dbContextType in dbContextTypes)
+        {
+            DbContext? context = scope.ServiceProvider.GetRequiredService(dbContextType) as DbContext;
+            context?.Database.Migrate();
         }
     }
 }

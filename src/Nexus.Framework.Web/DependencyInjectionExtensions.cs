@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
@@ -252,8 +253,18 @@ public static class DependencyInjectionExtensions
             options.AddPolicy("AllowAll", policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
         });
         
+        Assembly entryAssembly = Assembly.GetEntryAssembly();
+        if (entryAssembly == null)
+        {
+            throw new NexusFrameworkException(NexusFrameworkException.NullAssemblyException);
+        }
+        
         services.AddNexusServices();
-        services.AddNexusTypedClients(configuration, Assembly.GetEntryAssembly()!);
-        services.AddNexusPersistence(configuration, Assembly.GetEntryAssembly()!);
+        
+        services.AddNexusTypedClients(configuration, entryAssembly);
+        services.AddNexusPersistence(configuration, entryAssembly);
+        
+        services.AddAutoMapper(entryAssembly);
+        services.AddValidatorsFromAssembly(entryAssembly);
     }
 }

@@ -12,6 +12,8 @@
     <ItemGroup>
         <PackageReference Include="Steeltoe.Discovery.Consul" />
         <PackageReference Include="Swashbuckle.AspNetCore" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
     </ItemGroup>
 
     <ItemGroup>
