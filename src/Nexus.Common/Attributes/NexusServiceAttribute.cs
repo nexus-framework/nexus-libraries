@@ -4,7 +4,7 @@ namespace Nexus.Common.Attributes;
 
 #pragma warning disable S2326
 [AttributeUsage(AttributeTargets.Class)]
-public class NexusServiceAttribute<T> : Attribute, INexusAttribute
+public class NexusServiceAttribute<T> : Attribute, INexusServiceAttribute
     where T : INexusService
 {
     public NexusServiceLifeTime Lifetime { get; }
@@ -16,7 +16,7 @@ public class NexusServiceAttribute<T> : Attribute, INexusAttribute
 }
 
 [AttributeUsage(AttributeTargets.Class)]
-public class NexusServiceAttribute : Attribute, INexusAttribute
+public class NexusServiceAttribute : Attribute, INexusServiceAttribute
 {
     public NexusServiceLifeTime Lifetime { get; }
 
@@ -26,3 +26,15 @@ public class NexusServiceAttribute : Attribute, INexusAttribute
     }
 }
 #pragma warning restore S2326
+
+public interface INexusServiceAttribute
+{
+    NexusServiceLifeTime Lifetime { get; }
+}
+
+public enum NexusServiceLifeTime
+{
+    Scoped = 1,
+    Singleton = 2,
+    Transient = 3,
+}

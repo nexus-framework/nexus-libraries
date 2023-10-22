@@ -90,7 +90,7 @@ public static class DependencyInjectionExtensions
     /// <param name="services">The <see cref="IServiceCollection"/> to add the meters to.</param>
     /// <param name="serviceName">The name of the service.</param>
     /// <param name="meterNames">An array of meter names to be added.</param>
-    public static void AddNexusMeters(this IServiceCollection services, string serviceName, string[] meterNames)
+    private static void AddNexusMeters(this IServiceCollection services, string serviceName, string[] meterNames)
     {
         OpenTelemetryBuilder telemetryBuilder = services
             .AddOpenTelemetry()

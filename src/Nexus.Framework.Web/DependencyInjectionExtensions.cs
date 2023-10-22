@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using Nexus.Common.Attributes;
 using Nexus.Framework.Web.Configuration;
+using Nexus.Framework.Web.Exceptions;
 using Nexus.Framework.Web.Filters;
 using Nexus.Management;
 using Steeltoe.Common.Http.Discovery;
@@ -80,9 +81,9 @@ public static class DependencyInjectionExtensions
         {
             Attribute attribute = type.GetCustomAttribute(typeof(NexusServiceAttribute<>))!;
             Type genericType = attribute.GetType().GetGenericArguments()[0];
-            INexusAttribute nexusAttribute = (attribute as INexusAttribute)!;
+            INexusServiceAttribute nexusServiceAttribute = (attribute as INexusServiceAttribute)!;
 
-            switch (nexusAttribute.Lifetime)
+            switch (nexusServiceAttribute.Lifetime)
             {
                 case NexusServiceLifeTime.Scoped:
                     services.AddScoped( genericType, type);
@@ -100,9 +101,9 @@ public static class DependencyInjectionExtensions
         foreach (Type type in nexusServiceTypes)
         {
             Attribute attribute = type.GetCustomAttribute(typeof(NexusServiceAttribute))!;
-            INexusAttribute nexusAttribute = (attribute as INexusAttribute)!;
+            INexusServiceAttribute nexusServiceAttribute = (attribute as INexusServiceAttribute)!;
 
-            switch (nexusAttribute.Lifetime)
+            switch (nexusServiceAttribute.Lifetime)
             {
                 case NexusServiceLifeTime.Scoped:
                     services.AddScoped(type);
@@ -121,6 +122,82 @@ public static class DependencyInjectionExtensions
     {
         services.AddNexusServices(typeof(DependencyInjectionExtensions).Assembly);
         services.AddNexusServices(Assembly.GetEntryAssembly()!);
+    }
+
+    private static void AddNexusTypedClients(this IServiceCollection services, IConfiguration configuration, Assembly assembly)
+    {
+        Type[] allTypes = assembly.GetTypes();
+        IEnumerable<Type> nexusTypedClientTypes =
+            allTypes.Where(t => t.GetCustomAttributes(typeof(NexusTypedClientAttribute<>), true).Length > 0);
+        
+        foreach (Type implementationType in nexusTypedClientTypes)
+        {
+            Attribute attribute = implementationType.GetCustomAttribute(typeof(NexusTypedClientAttribute<>))!;
+            Type interfaceType = attribute.GetType().GetGenericArguments()[0];
+            INexusTypedClientAttribute nexusTypedClientAttribute = (attribute as INexusTypedClientAttribute)!;
+
+            services.AddNexusTypedClient(configuration, interfaceType, implementationType, nexusTypedClientAttribute.Name);
+        }
+    }
+
+    private static void AddNexusTypedClient(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        Type interfaceType,
+        Type implementationType,
+        string clientName)
+    {
+        Type extensionMethodClassType = typeof(HttpClientBuilderExtensions);
+        MethodInfo[] extensionMethods = extensionMethodClassType.GetMethods(BindingFlags.Static | BindingFlags.Public);
+        MethodInfo? addTypedClientMethod = extensionMethods.FirstOrDefault(method => method.Name == "AddTypedClient" && method.GetGenericArguments().Length == 2);
+
+        if (addTypedClientMethod == null)
+        {
+            throw new NexusTypedClientException(NexusTypedClientException.UnableToRegisterTypedClient);
+        }
+        
+        FrameworkSettings settings = new ();
+        configuration.GetRequiredSection(nameof(FrameworkSettings)).Bind(settings);
+        
+        IHttpClientBuilder clientBuilder = services.AddHttpClient(clientName);
+        if (settings.Discovery is { Enable: true })
+        {
+            clientBuilder.AddServiceDiscovery();
+        }
+
+        clientBuilder
+            .AddServiceDiscovery()
+            .ConfigureHttpClient((serviceProvider, options) =>
+            {
+                IHttpContextAccessor httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+
+                if (httpContextAccessor.HttpContext == null)
+                {
+                    return;
+                }
+
+                string? bearerToken = httpContextAccessor.HttpContext.Request.Headers["Authorization"]
+                    .FirstOrDefault(h =>
+                        !string.IsNullOrEmpty(h) &&
+                        h.StartsWith("bearer ", StringComparison.InvariantCultureIgnoreCase));
+
+                if (!string.IsNullOrEmpty(bearerToken))
+                {
+                    options.DefaultRequestHeaders.Add("Authorization", bearerToken);
+                }
+            })
+            .ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                return new HttpClientHandler
+                {
+                    ClientCertificateOptions = ClientCertificateOption.Manual,
+                    ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
+                };
+            });
+        
+        MethodInfo genericMethod = addTypedClientMethod.MakeGenericMethod(interfaceType, implementationType);
+        object[] parameters = { clientBuilder };
+        genericMethod.Invoke(null, parameters);
     }
     
     /// <summary>
@@ -176,58 +253,6 @@ public static class DependencyInjectionExtensions
         });
         
         services.AddNexusServices();
-    }
-
-    /// <summary>
-    /// Adds a Nexus typed HTTP client to the <see cref="IServiceCollection"/>.
-    /// </summary>
-    /// <typeparam name="TClient">The type of the client interface.</typeparam>
-    /// <typeparam name="TImplementation">The type of the client implementation.</typeparam>
-    /// <param name="services">The <see cref="IServiceCollection"/> to add the client to.</param>
-    /// <param name="configuration">The <see cref="IConfiguration"/> used to retrieve framework settings.</param>
-    /// <param name="clientName">The name of the HTTP client to configure.</param>
-    public static void AddNexusTypedClient<TClient, TImplementation>(this IServiceCollection services, IConfiguration configuration, string clientName)
-        where TClient : class
-        where TImplementation : class, TClient
-    {
-        FrameworkSettings settings = new ();
-        configuration.GetRequiredSection(nameof(FrameworkSettings)).Bind(settings);
-        
-        IHttpClientBuilder clientBuilder = services.AddHttpClient(clientName);
-        if (settings.Discovery is { Enable: true })
-        {
-            clientBuilder.AddServiceDiscovery();
-        }
-        
-        clientBuilder
-            .AddServiceDiscovery()
-            .ConfigureHttpClient((serviceProvider, options) =>
-            {
-                IHttpContextAccessor httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
-
-                if (httpContextAccessor.HttpContext == null)
-                {
-                    return;
-                }
-
-                string? bearerToken = httpContextAccessor.HttpContext.Request.Headers["Authorization"]
-                    .FirstOrDefault(h =>
-                        !string.IsNullOrEmpty(h) &&
-                        h.StartsWith("bearer ", StringComparison.InvariantCultureIgnoreCase));
-
-                if (!string.IsNullOrEmpty(bearerToken))
-                {
-                    options.DefaultRequestHeaders.Add("Authorization", bearerToken);
-                }
-            })
-            .ConfigurePrimaryHttpMessageHandler(() =>
-            {
-                return new HttpClientHandler
-                {
-                    ClientCertificateOptions = ClientCertificateOption.Manual,
-                    ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
-                };
-            })
-            .AddTypedClient<TClient, TImplementation>();
+        services.AddNexusTypedClients(configuration, Assembly.GetEntryAssembly()!);
     }
 }
