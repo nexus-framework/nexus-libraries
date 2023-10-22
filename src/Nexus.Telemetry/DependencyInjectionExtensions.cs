@@ -76,10 +76,10 @@ public static class DependencyInjectionExtensions
 
         string[] meterNames = meterTypes.Select(type =>
         {
-            Attribute attribute = type.GetCustomAttribute(typeof(NexusServiceAttribute))!;
+            Attribute attribute = type.GetCustomAttribute(typeof(NexusMeterAttribute))!;
             INexusMeterAttribute meterAttribute = (attribute as INexusMeterAttribute)!;
             return meterAttribute.Name;
-        }).ToArray();
+        }).Distinct().ToArray();
         
         services.AddNexusMeters(telemetrySettings.ServiceName, meterNames);
     }
@@ -92,7 +92,8 @@ public static class DependencyInjectionExtensions
     /// <param name="meterNames">An array of meter names to be added.</param>
     public static void AddNexusMeters(this IServiceCollection services, string serviceName, string[] meterNames)
     {
-        OpenTelemetryBuilder telemetryBuilder = services.AddOpenTelemetry()
+        OpenTelemetryBuilder telemetryBuilder = services
+            .AddOpenTelemetry()
             .ConfigureResource(options => options.AddService(serviceName));
         
         if (meterNames.Length > 0)
