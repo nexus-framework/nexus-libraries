@@ -43,6 +43,8 @@ public abstract class NexusServiceBootstrapper
         Args = args;
         AppBuilder = WebApplication.CreateBuilder(args);
     }
+    
+    private readonly Assembly _callingAssembly = Assembly.GetCallingAssembly();
 
     /// <summary>
     /// Performs the bootstrap process and runs the web application.
@@ -85,7 +87,7 @@ public abstract class NexusServiceBootstrapper
     /// </summary>
     protected virtual void AddServices()
     {
-        AppBuilder.Services.AddWebFramework(AppBuilder.Configuration);
+        AppBuilder.Services.AddWebFramework(AppBuilder.Configuration, _callingAssembly);
     }
 
     /// <summary>

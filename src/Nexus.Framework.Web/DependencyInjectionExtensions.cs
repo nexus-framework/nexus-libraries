@@ -24,7 +24,7 @@ public static class DependencyInjectionExtensions
     /// </summary>
     /// <param name="services">The service collection.</param>
     /// <param name="settings">The API documentation settings.</param>
-    private static void AddApiDocumentation(this IServiceCollection services, ApiDocumentationSettings settings)
+    private static void AddApiDocumentation(this IServiceCollection services, ApiDocumentationSettings settings, Assembly callingAssembly)
     {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
@@ -36,11 +36,9 @@ public static class DependencyInjectionExtensions
                 Description = settings.Description,
             });
 
-            Assembly? entryAssembly = Assembly.GetEntryAssembly();
-
-            if (entryAssembly != null)
+            if (callingAssembly != null)
             {
-                string xmlFileName = $"{entryAssembly.GetName().Name}.xml";
+                string xmlFileName = $"{callingAssembly.GetName().Name}.xml";
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName));
             }
 
@@ -117,12 +115,6 @@ public static class DependencyInjectionExtensions
                     break;
             }
         }
-    }
-
-    private static void AddNexusServices(this IServiceCollection services)
-    {
-        services.AddNexusServices(typeof(DependencyInjectionExtensions).Assembly);
-        services.AddNexusServices(Assembly.GetEntryAssembly()!);
     }
 
     private static void AddNexusTypedClients(this IServiceCollection services, IConfiguration configuration, Assembly assembly)
@@ -206,14 +198,14 @@ public static class DependencyInjectionExtensions
     /// </summary>
     /// <param name="services">The service collection.</param>
     /// <param name="configuration">The configuration.</param>
-    public static void AddWebFramework(this IServiceCollection services, IConfiguration configuration)
+    public static void AddWebFramework(this IServiceCollection services, IConfiguration configuration, Assembly callingAssembly)
     {
         FrameworkSettings settings = new ();
         configuration.GetRequiredSection(nameof(FrameworkSettings)).Bind(settings);
 
         if (settings.Swagger is { Enable: true })
         {
-            services.AddApiDocumentation(settings.Swagger);
+            services.AddApiDocumentation(settings.Swagger, callingAssembly);
         }
 
         if (settings.ApiControllers is { Enable: true })
@@ -253,18 +245,13 @@ public static class DependencyInjectionExtensions
             options.AddPolicy("AllowAll", policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
         });
         
-        Assembly entryAssembly = Assembly.GetEntryAssembly();
-        if (entryAssembly == null)
-        {
-            throw new NexusFrameworkException(NexusFrameworkException.NullAssemblyException);
-        }
+        services.AddNexusServices(typeof(DependencyInjectionExtensions).Assembly);
+        services.AddNexusServices(callingAssembly);
         
-        services.AddNexusServices();
+        services.AddNexusTypedClients(configuration, callingAssembly);
+        services.AddNexusPersistence(configuration, callingAssembly);
         
-        services.AddNexusTypedClients(configuration, entryAssembly);
-        services.AddNexusPersistence(configuration, entryAssembly);
-        
-        services.AddAutoMapper(entryAssembly);
-        services.AddValidatorsFromAssembly(entryAssembly);
+        services.AddAutoMapper(callingAssembly);
+        services.AddValidatorsFromAssembly(callingAssembly);
     }
 }
