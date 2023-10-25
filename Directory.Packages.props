@@ -34,7 +34,6 @@
     <PackageVersion Include="Nexus.Management" Version="0.1.4" />
     <PackageVersion Include="Nexus.Persistence" Version="0.1.4" />
     <PackageVersion Include="Nexus.Telemetry" Version="0.1.4-preview.1" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
     <PackageVersion Include="Npgsql" Version="7.0.4" />
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
