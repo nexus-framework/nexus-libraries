@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nexus.Framework.Web.Configuration;
 using Nexus.Framework.Web.Logging;
+using Nexus.Framework.Web.Middlewares;
 using Nexus.Persistence;
 using Serilog;
 
@@ -107,6 +108,7 @@ public abstract class NexusServiceBootstrapper
 
         App.UseHttpsRedirection();
         App.UseCors("AllowAll");
+        App.UseNexusExceptionHandler();
 
         if (settings.Auth is { Enable: true })
         {
