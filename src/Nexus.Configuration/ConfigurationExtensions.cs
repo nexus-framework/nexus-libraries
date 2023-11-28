@@ -53,9 +53,12 @@ public static class ConfigurationExtensions
     /// <param name="configuration">The ConfigurationManager.</param>
     public static void AddNexusConfiguration(this ConfigurationManager configuration)
     {
+        string testConfigPath = Path.Combine(Environment.CurrentDirectory, "appsettings.test.json");
+        
         configuration.SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
             .AddJsonFile("appsettings.Global.json", optional: true)
             .AddJsonFile("appsettings.json", optional: true)
+            .AddJsonFile(testConfigPath, optional: true)
             .AddEnvironmentVariables();
     }
 }
