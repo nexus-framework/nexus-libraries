@@ -159,7 +159,6 @@ public static class DependencyInjectionExtensions
         }
 
         clientBuilder
-            .AddServiceDiscovery()
             .ConfigureHttpClient((serviceProvider, options) =>
             {
                 IHttpContextAccessor httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
