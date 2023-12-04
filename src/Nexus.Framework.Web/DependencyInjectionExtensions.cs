@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using Nexus.Common.Attributes;
+using Nexus.Framework.Web;
 using Nexus.Framework.Web.Configuration;
 using Nexus.Framework.Web.Exceptions;
 using Nexus.Framework.Web.Filters;
@@ -19,11 +20,6 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// </summary>
 public static class DependencyInjectionExtensions
 {
-    /// <summary>
-    /// Adds API documentation using Swagger to the service collection based on the specified settings.
-    /// </summary>
-    /// <param name="services">The service collection.</param>
-    /// <param name="settings">The API documentation settings.</param>
     private static void AddApiDocumentation(this IServiceCollection services, ApiDocumentationSettings settings, Assembly callingAssembly)
     {
         services.AddEndpointsApiExplorer();
@@ -197,6 +193,7 @@ public static class DependencyInjectionExtensions
     /// </summary>
     /// <param name="services">The service collection.</param>
     /// <param name="configuration">The configuration.</param>
+    /// <param name="callingAssembly">The assembly to be analyzed for API documentation generation.</param>B
     public static void AddWebFramework(this IServiceCollection services, IConfiguration configuration, Assembly callingAssembly)
     {
         FrameworkSettings settings = new ();
@@ -244,7 +241,7 @@ public static class DependencyInjectionExtensions
             options.AddPolicy("AllowAll", policy => { policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); });
         });
         
-        services.AddNexusServices(typeof(DependencyInjectionExtensions).Assembly);
+        services.AddNexusServices(typeof(NexusServiceBootstrapper).Assembly);
         services.AddNexusServices(callingAssembly);
         
         services.AddNexusTypedClients(configuration, callingAssembly);

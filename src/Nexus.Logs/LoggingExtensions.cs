@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Core;
@@ -10,6 +11,7 @@ namespace Nexus.Logs;
 /// <summary>
 /// Provides extension methods for configuring core logging.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class LoggingExtensions
 {
     /// <summary>

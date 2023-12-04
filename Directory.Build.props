@@ -22,6 +22,6 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/afroze9/nexus</RepositoryUrl>
-        <Version>$(NexusLibraryVersion)-preview3</Version>
+        <Version>$(NexusLibraryVersion)</Version>
     </PropertyGroup>
 </Project>

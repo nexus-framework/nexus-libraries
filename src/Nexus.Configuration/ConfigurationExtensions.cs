@@ -6,6 +6,7 @@ namespace Nexus.Configuration;
 /// <summary>
 /// Provides extension methods for configuring core configuration settings.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class ConfigurationExtensions
 {
     /// <summary>

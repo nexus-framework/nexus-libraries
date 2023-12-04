@@ -39,10 +39,15 @@ public class UnitOfWorkBase : IUnitOfWork
     }
 
     
+     /// <summary>
+    /// Disposes the resources being used by the object.
+    /// </summary>
+    /// <param name="disposing">True if managed resources should be disposed, false otherwise.</param>
     protected virtual void Dispose(bool disposing)
     {
         if (disposing)
         {
+            // Disposing managed resources
             _transaction?.Dispose();
             _context?.Dispose();
         }

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Nexus.Persistence;
@@ -12,6 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection;
 /// <summary>
 /// A static class that provides extension methods for adding core persistence to the service collection.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class DependencyInjectionExtensions
 {
     /// <summary>

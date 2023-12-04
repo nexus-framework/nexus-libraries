@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Steeltoe.Management.Endpoint;
 using Steeltoe.Management.Endpoint.Health;
@@ -10,6 +11,7 @@ namespace Nexus.Management;
 /// <summary>
 /// A static class that provides extension methods for adding core actuators to the service collection.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public static class DependencyInjectionExtensions
 {
     /// <summary>
