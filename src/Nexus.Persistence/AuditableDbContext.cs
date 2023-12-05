@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Nexus.Persistence.Auditing;
 
 namespace Nexus.Persistence;
@@ -6,6 +7,7 @@ namespace Nexus.Persistence;
 /// <summary>
 /// Represents a custom DbContext that includes auditing functionality for entities.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class AuditableDbContext : DbContextBase
 {
     private readonly AuditableEntitySaveChangesInterceptor _auditableEntitySaveChangesInterceptor;

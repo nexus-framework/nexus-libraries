@@ -3,6 +3,7 @@ using Nexus.Common.Attributes;
 
 namespace Nexus.Common.UnitTests.Attributes;
 
+[ExcludeFromCodeCoverage]
 public class NexusServiceAttributeTest
 {
     [Fact]
@@ -12,7 +13,7 @@ public class NexusServiceAttributeTest
         NexusServiceLifeTime expectedLifetime = NexusServiceLifeTime.Scoped;
         
         // Act
-        NexusServiceAttribute<SampleService>? attribute = new NexusServiceAttribute<SampleService>(expectedLifetime);
+        NexusServiceAttribute<TestNexusService>? attribute = new (expectedLifetime);
         
         // Assert
         Assert.Equal(expectedLifetime, attribute.Lifetime);
@@ -25,7 +26,7 @@ public class NexusServiceAttributeTest
     public void NexusServiceAttribute_Initializes_WithGivenLifetime(NexusServiceLifeTime lifeTime)
     {
         // Arrange and Act
-        NexusServiceAttribute<TestNexusService>? attr = new NexusServiceAttribute<TestNexusService>(lifeTime);
+        NexusServiceAttribute<TestNexusService>? attr = new (lifeTime);
 
         // Assert
         Assert.Equal(lifeTime, attr.Lifetime);
@@ -35,7 +36,7 @@ public class NexusServiceAttributeTest
     public void NexusServiceAttribute_Sets_Lifetime()
     {
         // Arrange
-        NexusServiceAttribute<TestNexusService>? attr = new NexusServiceAttribute<TestNexusService>(NexusServiceLifeTime.Singleton);
+        NexusServiceAttribute<TestNexusService>? attr = new (NexusServiceLifeTime.Singleton);
 
         // Act and Assert
         Assert.Equal(NexusServiceLifeTime.Singleton, attr.Lifetime);
@@ -48,18 +49,14 @@ public class NexusServiceAttributeTest
         NexusServiceLifeTime expectedLifetime = NexusServiceLifeTime.Transient;
         
         // Act
-        NexusServiceAttribute? attribute = new NexusServiceAttribute(expectedLifetime);
+        NexusServiceAttribute? attribute = new (expectedLifetime);
 
         // Assert
         Assert.Equal(expectedLifetime, attribute.Lifetime);
     }
 }
 
-public class SampleService : INexusService
-{
-    // Implement required methods and properties for INexusService here
-}
-
+[ExcludeFromCodeCoverage]
 public class TestNexusService : INexusService
 {
     // Implement required methods and properties for INexusService here

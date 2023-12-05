@@ -67,7 +67,7 @@ public static class DependencyInjectionExtensions
                 services,
                 new Action<DbContextOptionsBuilder>(options => options.UseNpgsql(configuration)),
                 ServiceLifetime.Scoped,
-                ServiceLifetime.Scoped
+                ServiceLifetime.Scoped,
             };
             genericMethod.Invoke(null, parameters);
         }

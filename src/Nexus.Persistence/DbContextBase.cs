@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 
 namespace Nexus.Persistence;
 
 /// <summary>
 /// Base class for custom DbContext implementations.
 /// </summary>
+[ExcludeFromCodeCoverage] 
 public class DbContextBase : DbContext
 {
     /// <summary>

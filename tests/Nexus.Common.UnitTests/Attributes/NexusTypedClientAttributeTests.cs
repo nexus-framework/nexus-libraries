@@ -3,6 +3,7 @@ using Nexus.Common.Attributes;
 
 namespace Nexus.Common.UnitTests.Attributes;
 
+[ExcludeFromCodeCoverage]
 public class NexusTypedClientAttributeTests
 {
     [Fact]
@@ -12,7 +13,7 @@ public class NexusTypedClientAttributeTests
         const string expectedName = "custom-name";
 
         // Act
-        NexusTypedClientAttribute<string>? attribute = new NexusTypedClientAttribute<string>(expectedName);
+        NexusTypedClientAttribute<string>? attribute = new (expectedName);
 
         // Assert
         Assert.Equal(expectedName, attribute.Name);

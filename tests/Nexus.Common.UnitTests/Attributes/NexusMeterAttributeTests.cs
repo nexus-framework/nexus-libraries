@@ -2,6 +2,7 @@
 
 namespace Nexus.Common.UnitTests.Attributes;
 
+[ExcludeFromCodeCoverage]
 public class NexusMeterAttributeTests
 {
     [Fact]
